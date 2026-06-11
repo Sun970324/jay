@@ -1,0 +1,17 @@
+{
+  "rewrites": [
+    {
+      "source": "/detail/:id",
+      "has": [{ "type": "query", "key": "flutter" }],
+      "destination": "/index.html"
+    },
+    {
+      "source": "/detail/:id",
+      "destination": "/api/detail/:id"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
