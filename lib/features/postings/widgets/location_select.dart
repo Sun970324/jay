@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jay/constants/gaps.dart';
 import 'package:jay/constants/sizes.dart';
 import 'package:jay/features/postings/models/filter_model.dart';
@@ -69,45 +70,11 @@ class _LocationSelectState extends ConsumerState<LocationSelect> {
     setState(() => _isExpanded = false);
   }
 
-  Widget _buildChip({
-    required String label,
-    required bool selected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(right: Sizes.size6, bottom: Sizes.size6),
-        padding: const EdgeInsets.symmetric(
-          horizontal: Sizes.size12,
-          vertical: Sizes.size6,
-        ),
-        decoration: BoxDecoration(
-          color: selected
-              ? Theme.of(context).primaryColor
-              : const Color(0xffF3F4F8),
-          borderRadius: BorderRadius.circular(Sizes.size20),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: Sizes.size12,
-            fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-            color: selected ? Colors.white : const Color(0xff747474),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _clickOpen,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        height: _isExpanded ? 410 : Sizes.size56,
+      child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: Sizes.size16,
           vertical: Sizes.size16,
@@ -155,57 +122,119 @@ class _LocationSelectState extends ConsumerState<LocationSelect> {
             ),
             if (_isExpanded) ...[
               Gaps.v16,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              SizedBox(
+                height: 300,
+                child: Row(
                   children: [
                     Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // 시/도
-                            Wrap(
-                              children: List.generate(
-                                locationList.length,
-                                (i) => _buildChip(
-                                  label: locationList[i].provinceName,
-                                  selected: _selectedProvince == i,
-                                  onTap: () => setState(() {
-                                    _selectedProvince = i;
-                                    _selectedCity = -1;
-                                  }),
-                                ),
+                      child: ListView.builder(
+                        itemCount: locationList.length,
+                        itemBuilder: (context, i) {
+                          final selected = _selectedProvince == i;
+                          return GestureDetector(
+                            onTap: () => setState(() {
+                              _selectedProvince = i;
+                              _selectedCity = -1;
+                            }),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 12),
+                              color: Colors.transparent,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    locationList[i].provinceName,
+                                    style: TextStyle(
+                                      fontSize: Sizes.size14,
+                                      fontFamily: selected
+                                          ? 'PretendardSemiBold'
+                                          : 'PretendardMedium',
+                                      color: selected
+                                          ? const Color(0xff1154ED)
+                                          : const Color(0xff747474),
+                                    ),
+                                  ),
+                                  if (selected)
+                                    SvgPicture.asset(
+                                      'assets/images/detail_check.svg',
+                                      width: 14,
+                                      height: 14,
+                                      colorFilter: const ColorFilter.mode(
+                                          Color(0xff1154ED), BlendMode.srcIn),
+                                    ),
+                                ],
                               ),
                             ),
-                            if (_selectedProvince != -1) ...[
-                              const Divider(color: Color(0xffDFE4EB)),
-                              Gaps.v4,
-                              // 시/군/구
-                              Wrap(
-                                children: List.generate(
-                                  locationList[_selectedProvince]
-                                      .cityName
-                                      .length,
-                                  (i) => _buildChip(
-                                    label: locationList[_selectedProvince]
-                                        .cityName[i],
-                                    selected: _selectedCity == i,
-                                    onTap: () =>
-                                        setState(() => _selectedCity = i),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
+                          );
+                        },
                       ),
                     ),
-                    Gaps.v16,
-                    FilterButton(callbackFn: _closeButton),
+                    const VerticalDivider(color: Color(0xffDFE4EB), width: 1),
+                    Expanded(
+                      child: _selectedProvince == -1
+                          ? const Center(
+                              child: Text(
+                                '시/도를\n선택하세요',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Color(0xff9EA7B2),
+                                ),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: locationList[_selectedProvince]
+                                  .cityName
+                                  .length,
+                              itemBuilder: (context, i) {
+                                final selected = _selectedCity == i;
+                                return GestureDetector(
+                                  onTap: () =>
+                                      setState(() => _selectedCity = i),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 12),
+                                    color: Colors.transparent,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          locationList[_selectedProvince]
+                                              .cityName[i],
+                                          style: TextStyle(
+                                            fontSize: Sizes.size14,
+                                            fontFamily: selected
+                                                ? 'PretendardSemiBold'
+                                                : 'PretendardMedium',
+                                            color: selected
+                                                ? const Color(0xff1154ED)
+                                                : const Color(0xff747474),
+                                          ),
+                                        ),
+                                        if (selected)
+                                          SvgPicture.asset(
+                                            'assets/images/detail_check.svg',
+                                            width: 14,
+                                            height: 14,
+                                            colorFilter: const ColorFilter.mode(
+                                                Color(0xff1154ED),
+                                                BlendMode.srcIn),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
                   ],
                 ),
               ),
+              Gaps.v16,
+              FilterButton(callbackFn: _closeButton),
             ],
           ],
         ),

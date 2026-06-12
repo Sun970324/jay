@@ -6,8 +6,8 @@ import 'package:jay/constants/sizes.dart';
 import 'package:jay/features/users/repos/auth_repo.dart';
 import 'package:jay/features/users/view_models/auth_view_model.dart';
 import 'package:jay/features/legal/views/privacy_policy_screen.dart';
-import 'package:jay/features/users/views/edit_profile_screen.dart';
 import 'package:jay/features/users/views/login_screen.dart';
+import 'package:jay/features/users/views/service_info_screen.dart';
 
 class MyPageScreen extends ConsumerWidget {
   static const routeURL = '/my-page';
@@ -24,220 +24,127 @@ class MyPageScreen extends ConsumerWidget {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         backgroundColor: const Color(0xffF3F4F8),
-        title: const Text(
-          '마이페이지',
-          style: TextStyle(
-            fontSize: Sizes.size18,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
       ),
-      body: isLoggedIn ? _LoggedInBody(user: user, ref: ref) : const _GuestBody(),
+      body: isLoggedIn ? _LoggedInBody(user: user) : const _GuestBody(),
     );
   }
 }
 
 class _LoggedInBody extends StatelessWidget {
   final dynamic user;
-  final WidgetRef ref;
-  const _LoggedInBody({required this.user, required this.ref});
+  const _LoggedInBody({required this.user});
 
-  Future<void> _deleteAccount(BuildContext context) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('회원탈퇴'),
-        content: const Text('정말 탈퇴하시겠어요?\n작성한 게시글과 댓글이 모두 삭제됩니다.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('취소'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('탈퇴', style: TextStyle(color: Color(0xffE53935))),
-          ),
-        ],
+  Widget _menuItem(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    Color? textColor,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Row(
+          children: [
+            Icon(icon, size: 22, color: const Color(0xff555555)),
+            Gaps.h12,
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'PretendardMedium',
+                  color: textColor ?? const Color(0xff3E3E3E),
+                ),
+              ),
+            ),
+            const Icon(Icons.chevron_right, size: 20, color: Color(0xff9EA7B2)),
+          ],
+        ),
       ),
     );
-    if (confirmed != true || !context.mounted) return;
-    await ref.read(authRepo).deleteAccount();
-    if (context.mounted) context.go('/');
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(Sizes.size16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector(
-            onTap: () => context.push(EditProfileScreen.routeURL),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(Sizes.size20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(Sizes.size14),
-              ),
-              child: Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 28,
-                    backgroundColor: Color(0xffF3F4F8),
-                    child: Icon(Icons.person, size: 28, color: Color(0xff747474)),
-                  ),
-                  Gaps.h16,
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          user?.userMetadata?['nickname'] ??
-                              '이름 없음',
-                          style: const TextStyle(
-                            fontSize: Sizes.size16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Gaps.v4,
-                        Text(
-                          user?.email ?? '',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: Color(0xff747474),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Icon(Icons.chevron_right,
-                      size: 20, color: Color(0xff9EA7B2)),
-                ],
-              ),
+          Text(
+            user?.userMetadata?['nickname'] ?? '이름 없음',
+            style: const TextStyle(
+              fontSize: Sizes.size18,
+              fontFamily: 'PretendardSemiBold',
+              color: Color(0xff1154ED),
+            ),
+          ),
+          Gaps.v4,
+          Text(
+            user?.email ?? '',
+            style: const TextStyle(
+              fontSize: 16,
+              fontFamily: 'PretendardRegular',
+              color: Color(0xff9EA7B2),
+            ),
+          ),
+          Gaps.v24,
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(Sizes.size14),
+            ),
+            child: Column(
+              children: [
+                _menuItem(
+                  context,
+                  icon: Icons.edit_note_outlined,
+                  label: '내가 쓴 글 관리',
+                  onTap: () => context.push('/my-posts'),
+                ),
+                const Divider(
+                    height: 1,
+                    color: Color(0xffECF0F7),
+                    indent: 20,
+                    endIndent: 20),
+                _menuItem(
+                  context,
+                  icon: Icons.chat_bubble_outline,
+                  label: '내가 쓴 댓글 관리',
+                  onTap: () => context.push('/my-comments'),
+                ),
+                const Divider(
+                    height: 1,
+                    color: Color(0xffECF0F7),
+                    indent: 20,
+                    endIndent: 20),
+                _menuItem(
+                  context,
+                  icon: Icons.favorite_border,
+                  label: '좋아요',
+                  onTap: () => context.push('/my-likes'),
+                ),
+              ],
             ),
           ),
           Gaps.v12,
-          GestureDetector(
-            onTap: () => context.push('/my-posts'),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Sizes.size20, vertical: Sizes.size16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(Sizes.size14),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.edit_note_outlined,
-                      size: 22, color: Color(0xff444444)),
-                  Gaps.h12,
-                  Expanded(
-                    child: Text(
-                      '내가 쓴 글 관리',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  Icon(Icons.chevron_right,
-                      size: 20, color: Color(0xff9EA7B2)),
-                ],
-              ),
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(Sizes.size14),
             ),
-          ),
-          Gaps.v12,
-          GestureDetector(
-            onTap: () => context.push('/my-comments'),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Sizes.size20, vertical: Sizes.size16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(Sizes.size14),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.chat_bubble_outline,
-                      size: 22, color: Color(0xff444444)),
-                  Gaps.h12,
-                  Expanded(
-                    child: Text(
-                      '내가 쓴 댓글 관리',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  Icon(Icons.chevron_right,
-                      size: 20, color: Color(0xff9EA7B2)),
-                ],
-              ),
+            child: _menuItem(
+              context,
+              icon: Icons.info_outline,
+              label: '이용 정보',
+              onTap: () => context.push(ServiceInfoScreen.routeURL),
             ),
           ),
           const Spacer(),
-          GestureDetector(
-            onTap: () => ref.read(authProvider.notifier).signOut(),
-            child: Container(
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(Sizes.size12),
-                border: Border.all(color: const Color(0xffE1E1E1)),
-              ),
-              child: const Center(
-                child: Text(
-                  '로그아웃',
-                  style: TextStyle(
-                    fontSize: Sizes.size16,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xffE53935),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Gaps.v12,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () => context.push(PrivacyPolicyScreen.routeURL),
-                child: const Text(
-                  '개인정보 처리방침',
-                  style: TextStyle(fontSize: 12, color: Color(0xff9EA7B2)),
-                ),
-              ),
-              const Text('  ·  ',
-                  style: TextStyle(fontSize: 12, color: Color(0xff9EA7B2))),
-              GestureDetector(
-                onTap: () => context.push(TermsOfServiceScreen.routeURL),
-                child: const Text(
-                  '서비스 이용약관',
-                  style: TextStyle(fontSize: 12, color: Color(0xff9EA7B2)),
-                ),
-              ),
-            ],
-          ),
-          Gaps.v12,
-          GestureDetector(
-            onTap: () => _deleteAccount(context),
-            child: const Text(
-              '회원탈퇴',
-              style: TextStyle(
-                fontSize: 13,
-                color: Color(0xff9EA7B2),
-                decoration: TextDecoration.underline,
-                decorationColor: Color(0xff9EA7B2),
-              ),
-            ),
-          ),
-          Gaps.v32,
         ],
       ),
     );

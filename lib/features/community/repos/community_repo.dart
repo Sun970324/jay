@@ -62,6 +62,33 @@ class CommunityRepository {
         .toList();
   }
 
+  Future<List<CommunityPostModel>> getLikedPosts() async {
+    final userId = _client.auth.currentUser!.id;
+    final response = await _client
+        .from('community_likes')
+        .select('community_posts(*, profiles(nickname))')
+        .eq('user_id', userId);
+    return (response as List)
+        .where((e) => e['community_posts'] != null)
+        .map((e) {
+          final p = CommunityPostModel.fromMap(
+              e['community_posts'] as Map<String, dynamic>);
+          return CommunityPostModel(
+            id: p.id,
+            userId: p.userId,
+            authorName: p.authorName,
+            title: p.title,
+            content: p.content,
+            likesCount: p.likesCount,
+            commentsCount: p.commentsCount,
+            viewCount: p.viewCount,
+            createdAt: p.createdAt,
+            isLiked: true,
+          );
+        })
+        .toList();
+  }
+
   Future<CommunityPostModel?> getPostById(int id) async {
     final response = await _client
         .from('community_posts')

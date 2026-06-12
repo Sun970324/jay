@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class MainScreen extends StatelessWidget {
@@ -30,18 +31,15 @@ class MainScreen extends StatelessWidget {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 12,
-              offset: const Offset(0, -2),
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 6,
+              offset: const Offset(0, -1),
             ),
           ],
         ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          child: NavigationBarTheme(
+        child: NavigationBarTheme(
             data: NavigationBarThemeData(
               indicatorColor: Colors.transparent,
               overlayColor: WidgetStateProperty.all(Colors.transparent),
@@ -58,7 +56,7 @@ class MainScreen extends StatelessWidget {
                 final selected = states.contains(WidgetState.selected);
                 return TextStyle(
                   fontSize: 11,
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                  fontFamily: selected ? 'PretendardBold' : 'PretendardMedium',
                   color: selected
                       ? const Color(0xff1154ED)
                       : const Color(0xff9E9E9E),
@@ -70,27 +68,53 @@ class MainScreen extends StatelessWidget {
               surfaceTintColor: Colors.transparent,
               selectedIndex: _tabIndex(context),
               onDestinationSelected: (i) => _onTap(context, i),
-              destinations: const [
+              destinations: [
                 NavigationDestination(
-                  icon: Icon(Icons.assignment_outlined),
-                  selectedIcon: Icon(Icons.assignment),
+                  icon: SvgPicture.asset('assets/images/postings_nav_icon.svg',
+                      width: 26,
+                      height: 26,
+                      colorFilter: const ColorFilter.mode(
+                          Color(0xff9E9E9E), BlendMode.srcIn)),
+                  selectedIcon: SvgPicture.asset(
+                      'assets/images/postings_nav_icon.svg',
+                      width: 26,
+                      height: 26,
+                      colorFilter: const ColorFilter.mode(
+                          Color(0xff1154ED), BlendMode.srcIn)),
                   label: '맞춤 지원',
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.group_outlined),
-                  selectedIcon: Icon(Icons.group),
+                  icon: SvgPicture.asset('assets/images/community_nav_icon.svg',
+                      width: 26,
+                      height: 26,
+                      colorFilter: const ColorFilter.mode(
+                          Color(0xff9E9E9E), BlendMode.srcIn)),
+                  selectedIcon: SvgPicture.asset(
+                      'assets/images/community_nav_icon.svg',
+                      width: 26,
+                      height: 26,
+                      colorFilter: const ColorFilter.mode(
+                          Color(0xff1154ED), BlendMode.srcIn)),
                   label: '커뮤니티',
                 ),
                 NavigationDestination(
-                  icon: Icon(Icons.account_circle_outlined),
-                  selectedIcon: Icon(Icons.account_circle),
+                  icon: SvgPicture.asset('assets/images/mypage_nav_icon.svg',
+                      width: 26,
+                      height: 26,
+                      colorFilter: const ColorFilter.mode(
+                          Color(0xff9E9E9E), BlendMode.srcIn)),
+                  selectedIcon: SvgPicture.asset(
+                      'assets/images/mypage_nav_icon.svg',
+                      width: 26,
+                      height: 26,
+                      colorFilter: const ColorFilter.mode(
+                          Color(0xff1154ED), BlendMode.srcIn)),
                   label: '마이페이지',
                 ),
               ],
             ),
           ),
         ),
-      ),
     );
   }
 }

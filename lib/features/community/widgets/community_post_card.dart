@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jay/constants/gaps.dart';
 import 'package:jay/constants/sizes.dart';
 import 'package:jay/features/community/models/community_post_model.dart';
@@ -23,6 +24,13 @@ class CommunityPostCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(Sizes.size14),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,6 +64,8 @@ class CommunityPostCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             Gaps.v16,
+            const Divider(height: 1, color: Color(0xffECF0F7)),
+            Gaps.v12,
             Row(
               children: [
                 Text(

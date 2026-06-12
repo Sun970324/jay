@@ -76,13 +76,38 @@ class _CommunityWriteScreenState extends ConsumerState<CommunityWriteScreen> {
     }
   }
 
+  static const _borderSide = BorderSide(color: Color(0xffE1E4EA));
+  static const _focusedBorderSide = BorderSide(color: Color(0xff1154ED));
+  static final _borderRadius = BorderRadius.circular(12);
+
+  InputDecoration _inputDecoration(String hintText) {
+    return InputDecoration(
+      hintText: hintText,
+      hintStyle: const TextStyle(
+        color: Color(0xffBEC5CC),
+        fontFamily: 'PretendardRegular',
+        fontSize: 14,
+      ),
+      counterText: '',
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      border: OutlineInputBorder(
+          borderRadius: _borderRadius, borderSide: _borderSide),
+      enabledBorder: OutlineInputBorder(
+          borderRadius: _borderRadius, borderSide: _borderSide),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: _borderRadius, borderSide: _focusedBorderSide),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF3F4F8),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        backgroundColor: const Color(0xffF3F4F8),
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
         title: Text(
           _isEditMode ? '글 수정' : '글쓰기',
           style: const TextStyle(
@@ -91,78 +116,84 @@ class _CommunityWriteScreenState extends ConsumerState<CommunityWriteScreen> {
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: Sizes.size16),
-            child: TextButton(
-              onPressed: _isSubmitting ? null : _onSubmit,
-              child: _isSubmitting
-                  ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Text(
-                      _isEditMode ? '수정' : '등록',
-                      style: const TextStyle(
-                        fontSize: Sizes.size16,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff1154ED),
-                      ),
-                    ),
-            ),
+          IconButton(
+            icon: const Icon(Icons.close, size: 24),
+            onPressed: () => context.pop(),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(Sizes.size16),
-        child: Column(
-          children: [
-            Container(
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+          child: GestureDetector(
+            onTap: _isSubmitting ? null : _onSubmit,
+            child: Container(
+              height: 52,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(Sizes.size14),
+                color: const Color(0xff1154ED),
+                borderRadius: BorderRadius.circular(100),
               ),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _titleCtrl,
-                    style: const TextStyle(
-                      fontSize: Sizes.size16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    decoration: const InputDecoration(
-                      hintText: '제목',
-                      hintStyle: TextStyle(
-                        color: Color(0xffDAE1E9),
-                        fontWeight: FontWeight.w600,
+              child: Center(
+                child: _isSubmitting
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                            color: Colors.white, strokeWidth: 2),
+                      )
+                    : Text(
+                        _isEditMode ? '수정하기' : '등록하기',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'PretendardSemiBold',
+                          color: Colors.white,
+                        ),
                       ),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: Sizes.size16,
-                        vertical: Sizes.size14,
-                      ),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                  const Divider(height: 1, color: Color(0xffF3F4F8)),
-                  TextField(
-                    controller: _contentCtrl,
-                    minLines: 10,
-                    maxLines: null,
-                    style: const TextStyle(fontSize: Sizes.size14, height: 1.6),
-                    decoration: const InputDecoration(
-                      hintText: '내용을 입력해주세요.',
-                      hintStyle: TextStyle(color: Color(0xffDAE1E9)),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: Sizes.size16,
-                        vertical: Sizes.size14,
-                      ),
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ],
               ),
             ),
-            Gaps.v16,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '제목',
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'PretendardSemiBold',
+                color: Color(0xff333333),
+              ),
+            ),
+            Gaps.v8,
+            TextField(
+              controller: _titleCtrl,
+              maxLength: 100,
+              style:
+                  const TextStyle(fontSize: 14, fontFamily: 'PretendardMedium'),
+              decoration: _inputDecoration('최대 100자까지 입력 가능'),
+            ),
+            Gaps.v20,
+            const Text(
+              '내용',
+              style: TextStyle(
+                fontSize: 14,
+                fontFamily: 'PretendardSemiBold',
+                color: Color(0xff333333),
+              ),
+            ),
+            Gaps.v8,
+            TextField(
+              controller: _contentCtrl,
+              maxLength: 2000,
+              minLines: 8,
+              maxLines: null,
+              style: const TextStyle(
+                  fontSize: 14, fontFamily: 'PretendardMedium', height: 1.6),
+              decoration: _inputDecoration('최대 2000자까지 입력 가능'),
+            ),
           ],
         ),
       ),

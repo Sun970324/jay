@@ -15,6 +15,8 @@ import 'package:jay/features/users/views/login_screen.dart';
 import 'package:jay/features/users/views/my_page_screen.dart';
 import 'package:jay/features/users/views/edit_profile_screen.dart';
 import 'package:jay/features/users/views/my_comments_screen.dart';
+import 'package:jay/features/users/views/my_likes_screen.dart';
+import 'package:jay/features/users/views/service_info_screen.dart';
 import 'package:jay/features/users/views/onboarding_screen.dart';
 import 'package:jay/features/users/views/my_posts_screen.dart';
 import 'package:jay/features/legal/views/privacy_policy_screen.dart';
@@ -104,6 +106,16 @@ final routerProvider = Provider((ref) {
         name: MyCommentsScreen.routeName,
         path: MyCommentsScreen.routeURL,
         builder: (context, state) => const MyCommentsScreen(),
+      ),
+      GoRoute(
+        name: MyLikesScreen.routeName,
+        path: MyLikesScreen.routeURL,
+        builder: (context, state) => const MyLikesScreen(),
+      ),
+      GoRoute(
+        name: ServiceInfoScreen.routeName,
+        path: ServiceInfoScreen.routeURL,
+        builder: (context, state) => const ServiceInfoScreen(),
       ),
       GoRoute(
         name: EditProfileScreen.routeName,

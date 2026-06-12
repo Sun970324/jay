@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jay/constants/gaps.dart';
 import 'package:jay/constants/sizes.dart';
 import 'package:jay/features/users/view_models/auth_view_model.dart';
@@ -35,48 +36,43 @@ class LoginScreen extends ConsumerWidget {
         ),
       ),
       body: SafeArea(
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/jay_img.png', width: 72),
-              Gaps.v16,
+              SvgPicture.asset('assets/images/logo.svg', height: 52),
+              Gaps.v12,
               const Text(
-                '제이',
+                '필요한 도움이 닿기를',
                 style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.5,
-                ),
-              ),
-              Gaps.v8,
-              const Text(
-                '나에게 맞는 의료 복지 혜택을 찾아드려요',
-                style: TextStyle(
-                  fontSize: Sizes.size14,
+                  fontFamily: 'PretendardMedium',
+                  fontSize: Sizes.size18,
                   color: Color(0xff747474),
                 ),
               ),
-              const SizedBox(height: 56),
+              const SizedBox(height: 120),
               if (isLoading)
                 const CircularProgressIndicator()
               else ...[
                 _LoginButton(
-                  label: 'Google로 계속하기',
-                  backgroundColor: Colors.white,
+                  label: 'Kakao 계정으로 계속하기',
+                  backgroundColor: const Color(0xFFFEE500),
                   textColor: Colors.black87,
-                  icon: _GoogleIcon(),
+                  icon: SvgPicture.asset('assets/images/kakao_logo.svg',
+                      width: 20, height: 20),
                   onTap: () =>
-                      ref.read(authProvider.notifier).signInWithGoogle(),
+                      ref.read(authProvider.notifier).signInWithKakao(),
                 ),
                 Gaps.v12,
                 _LoginButton(
-                  label: '카카오로 계속하기',
-                  backgroundColor: const Color(0xFFFEE500),
+                  label: 'Google 계정으로 계속하기',
+                  backgroundColor: Colors.white,
                   textColor: Colors.black87,
-                  icon: const Icon(Icons.chat_bubble, size: 20),
+                  icon: SvgPicture.asset('assets/images/google_logo.svg',
+                      width: 20, height: 20),
                   onTap: () =>
-                      ref.read(authProvider.notifier).signInWithKakao(),
+                      ref.read(authProvider.notifier).signInWithGoogle(),
                 ),
               ],
             ],
@@ -112,6 +108,7 @@ class _LoginButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(Sizes.size12),
+          border: Border.all(color: const Color(0xffE1E1E1)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.06),
@@ -120,44 +117,23 @@ class _LoginButton extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            icon,
-            const SizedBox(width: 10),
             Text(
               label,
               style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                fontFamily: 'PretendardMedium',
                 color: textColor,
               ),
             ),
+            Positioned(
+              left: 20,
+              child: icon,
+            ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _GoogleIcon extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox(
-      width: 20,
-      height: 20,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Text(
-            'G',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Color(0xff4285F4),
-            ),
-          ),
-        ],
       ),
     );
   }

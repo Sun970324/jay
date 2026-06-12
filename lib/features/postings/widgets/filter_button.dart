@@ -17,7 +17,7 @@ class FilterButton extends StatelessWidget {
           vertical: Sizes.size10,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Sizes.size20),
+          borderRadius: BorderRadius.circular(Sizes.size16),
           color: Theme.of(context).primaryColor,
         ),
         child: const Center(
