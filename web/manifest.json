@@ -1,11 +1,11 @@
 {
-    "name": "jay",
-    "short_name": "jay",
+    "name": "제이(Jay)",
+    "short_name": "제이",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#F3F4F8",
+    "theme_color": "#1154ED",
+    "description": "놓치기 쉬운 의료 혜택을 제이에서 빠르게 확인하세요.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
