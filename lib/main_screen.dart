@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jay/features/postings/views/posting_screen.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends ConsumerWidget {
   final Widget child;
   const MainScreen({super.key, required this.child});
 
@@ -13,7 +15,11 @@ class MainScreen extends StatelessWidget {
     return 0;
   }
 
-  void _onTap(BuildContext context, int index) {
+  void _onTap(BuildContext context, WidgetRef ref, int index) {
+    if (index == 0 && _tabIndex(context) == 0) {
+      ref.read(postingScrollToTopProvider.notifier).state++;
+      return;
+    }
     switch (index) {
       case 0:
         context.go('/');
@@ -25,7 +31,7 @@ class MainScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: child,
       bottomNavigationBar: Container(
@@ -67,7 +73,7 @@ class MainScreen extends StatelessWidget {
               backgroundColor: Colors.white,
               surfaceTintColor: Colors.transparent,
               selectedIndex: _tabIndex(context),
-              onDestinationSelected: (i) => _onTap(context, i),
+              onDestinationSelected: (i) => _onTap(context, ref, i),
               destinations: [
                 NavigationDestination(
                   icon: SvgPicture.asset('assets/images/postings_nav_icon.svg',

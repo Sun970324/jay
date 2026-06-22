@@ -12,6 +12,9 @@ import 'package:go_router/go_router.dart';
 import 'package:jay/features/postings/widgets/search_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+final _postingScrollOffsetProvider = StateProvider<double>((ref) => 0.0);
+final postingScrollToTopProvider = StateProvider<int>((ref) => 0);
+
 class PostingScreen extends ConsumerStatefulWidget {
   static const routeURL = "/";
   static const routeName = "posting";
@@ -30,6 +33,10 @@ class _PostingScreenState extends ConsumerState<PostingScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final savedOffset = ref.read(_postingScrollOffsetProvider);
+      if (savedOffset > 0 && _scrollController.hasClients) {
+        _scrollController.jumpTo(savedOffset);
+      }
       _checkAndShowInitialFilterModal();
     });
   }
@@ -156,6 +163,8 @@ class _PostingScreenState extends ConsumerState<PostingScreen> {
   }
 
   void _onTapCard(PostingModel item) {
+    ref.read(_postingScrollOffsetProvider.notifier).state =
+        _scrollController.offset;
     context.goNamed(
       PostingDetailScreen.routeName,
       pathParameters: {
@@ -176,6 +185,16 @@ class _PostingScreenState extends ConsumerState<PostingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(postingScrollToTopProvider, (_, __) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+        ref.read(_postingScrollOffsetProvider.notifier).state = 0;
+      }
+    });
     return Scaffold(
       backgroundColor: const Color(0xffF3F4F8),
       appBar: AppBar(
@@ -185,8 +204,12 @@ class _PostingScreenState extends ConsumerState<PostingScreen> {
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(left: Sizes.size14),
-          child: SvgPicture.asset(
-            'assets/images/logo.svg',
+          child: GestureDetector(
+            onTap: () =>
+                ref.read(postingScrollToTopProvider.notifier).state++,
+            child: SvgPicture.asset(
+              'assets/images/logo.svg',
+            ),
           ),
         ),
         title: Container(
