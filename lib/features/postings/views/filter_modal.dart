@@ -8,7 +8,6 @@ import 'package:jay/features/postings/view_models/posting_view_model.dart';
 import 'package:jay/features/postings/widgets/birth_select.dart';
 import 'package:jay/features/postings/widgets/disease_select.dart';
 import 'package:jay/features/postings/widgets/family_select.dart';
-// import 'package:jay/features/postings/widgets/extra_select.dart';
 import 'package:jay/features/postings/widgets/location_select.dart';
 import 'package:jay/features/postings/view_models/filter_view_model.dart';
 import 'package:jay/features/postings/widgets/terms_of_service_select.dart';
@@ -113,33 +112,6 @@ class _FilterModalState extends ConsumerState<FilterModal> {
                   Gaps.v10,
                   FamilySelect(filterModel: filterModel),
                   Gaps.v32,
-                  // Row(
-                  //   children: [
-                  //     SvgPicture.asset(
-                  //       'assets/images/detail_check.svg',
-                  //       width: Sizes.size14,
-                  //       height: Sizes.size14,
-                  //       fit: BoxFit.scaleDown,
-                  //       color: const Color(0xff747474),
-                  //     ),
-                  //     Gaps.h7,
-                  //     const Text(
-                  //       '추가 정보가 필요한 분야를 선택해주세요.',
-                  //       style: TextStyle(
-                  //         fontWeight: FontWeight.w500,
-                  //         fontSize: Sizes.size14,
-                  //         color: Color(0xff747474),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // Gaps.v16,
-                  // ExtraSelect(filterModel: filterModel, title: '희귀/난치질환'),
-                  // Gaps.v10,
-                  // ExtraSelect(filterModel: filterModel, title: '장애'),
-                  // Gaps.v10,
-                  // ExtraSelect(filterModel: filterModel, title: '생활/예방'),
-                  // Gaps.v32,
                   Row(
                     children: [
                       SvgPicture.asset(

@@ -22,10 +22,7 @@ class FilterViewModel extends Notifier<FilterModel> {
       income: _repo.hasIncome(),
       familyCount: _repo.hasFamilyCount(),
       incomeRate: _repo.hasMedianIncomeRate(),
-      // isDisability: _repo.hasIsDisability(),
-      // isRareDisease: _repo.hasIsRareDisease(),
-      // isLifePrevention: _repo.hasIsLifePrevention(),
-      isPersonalInfoConsent: _repo.hasIsPersonalInfoConsent(),
+isPersonalInfoConsent: _repo.hasIsPersonalInfoConsent(),
     );
   }
 
@@ -46,12 +43,9 @@ class FilterViewModel extends Notifier<FilterModel> {
         cityName: cityName,
       ),
       birth: state.birth,
-      // isDisability: state.isDisability,
       income: state.income,
       familyCount: state.familyCount,
       incomeRate: state.incomeRate,
-      // isRareDisease: state.isRareDisease,
-      // isLifePrevention: state.isLifePrevention,
       isPersonalInfoConsent: state.isPersonalInfoConsent,
     );
   }
@@ -64,12 +58,9 @@ class FilterViewModel extends Notifier<FilterModel> {
         disease: savedDisease,
         location: state.location,
         birth: state.birth,
-        // isDisability: state.isDisability,
         income: state.income,
         familyCount: state.familyCount,
         incomeRate: state.incomeRate,
-        // isRareDisease: state.isRareDisease,
-        // isLifePrevention: state.isLifePrevention,
         isPersonalInfoConsent: state.isPersonalInfoConsent);
   }
 
@@ -81,12 +72,9 @@ class FilterViewModel extends Notifier<FilterModel> {
         disease: state.disease,
         location: location,
         birth: state.birth,
-        // isDisability: state.isDisability,
         income: state.income,
         familyCount: state.familyCount,
         incomeRate: state.incomeRate,
-        // isRareDisease: state.isRareDisease,
-        // isLifePrevention: state.isLifePrevention,
         isPersonalInfoConsent: state.isPersonalInfoConsent);
   }
 
@@ -97,12 +85,9 @@ class FilterViewModel extends Notifier<FilterModel> {
         disease: diseases,
         location: state.location,
         birth: state.birth,
-        // isDisability: state.isDisability,
         income: state.income,
         familyCount: state.familyCount,
         incomeRate: state.incomeRate,
-        // isRareDisease: state.isRareDisease,
-        // isLifePrevention: state.isLifePrevention,
         isPersonalInfoConsent: state.isPersonalInfoConsent);
   }
 
@@ -113,12 +98,9 @@ class FilterViewModel extends Notifier<FilterModel> {
         disease: state.disease,
         location: state.location,
         birth: birth,
-        // isDisability: state.isDisability,
         income: state.income,
         familyCount: state.familyCount,
         incomeRate: state.incomeRate,
-        // isRareDisease: state.isRareDisease,
-        // isLifePrevention: state.isLifePrevention,
         isPersonalInfoConsent: state.isPersonalInfoConsent);
   }
 
@@ -137,12 +119,9 @@ class FilterViewModel extends Notifier<FilterModel> {
         disease: state.disease,
         location: state.location,
         birth: birth,
-        // isDisability: state.isDisability,
         income: state.income,
         familyCount: state.familyCount,
         incomeRate: state.incomeRate,
-        // isRareDisease: state.isRareDisease,
-        // isLifePrevention: state.isLifePrevention,
         isPersonalInfoConsent: state.isPersonalInfoConsent);
   }
 
@@ -158,12 +137,9 @@ class FilterViewModel extends Notifier<FilterModel> {
         disease: state.disease,
         location: state.location,
         birth: state.birth,
-        // isDisability: state.isDisability,
         income: income,
         familyCount: familyCount,
         incomeRate: newRate,
-        // isRareDisease: state.isRareDisease,
-        // isLifePrevention: state.isLifePrevention,
         isPersonalInfoConsent: state.isPersonalInfoConsent);
   }
 
@@ -178,57 +154,11 @@ class FilterViewModel extends Notifier<FilterModel> {
         disease: state.disease,
         location: state.location,
         birth: state.birth,
-        // isDisability: state.isDisability,
         income: savedIncome,
         familyCount: savedFamilyCount,
         incomeRate: state.incomeRate,
-        // isRareDisease: state.isRareDisease,
-        // isLifePrevention: state.isLifePrevention,
         isPersonalInfoConsent: state.isPersonalInfoConsent);
   }
-
-  // Future<void> saveExtraOptions({
-  //   bool? isDisability,
-  //   bool? isRareDisease,
-  //   bool? isLifePrevention,
-  // }) async {
-  //   final newDisability = isDisability ?? state.isDisability;
-  //   final newRare = isRareDisease ?? state.isRareDisease;
-  //   final newLife = isLifePrevention ?? state.isLifePrevention;
-  //   await _repo.setIsDisability(newDisability);
-  //   await _repo.setIsRareDisease(newRare);
-  //   await _repo.setIsLifePrevention(newLife);
-  //   state = FilterModel(
-  //     disease: state.disease,
-  //     location: state.location,
-  //     birth: state.birth,
-  //     isDisability: newDisability,
-  //     income: state.income,
-  //     familyCount: state.familyCount,
-  //     incomeRate: state.incomeRate,
-  //     isRareDisease: newRare,
-  //     isLifePrevention: newLife,
-  //     isPersonalInfoConsent: state.isPersonalInfoConsent,
-  //   );
-  // }
-
-  // Future<void> loadSavedExtraOptions() async {
-  //   final newDisability = _repo.hasIsDisability();
-  //   final newRare = _repo.hasIsRareDisease();
-  //   final newLife = _repo.hasIsLifePrevention();
-  //   state = FilterModel(
-  //     disease: state.disease,
-  //     location: state.location,
-  //     birth: state.birth,
-  //     isDisability: newDisability,
-  //     income: state.income,
-  //     familyCount: state.familyCount,
-  //     incomeRate: state.incomeRate,
-  //     isRareDisease: newRare,
-  //     isLifePrevention: newLife,
-  //     isPersonalInfoConsent: state.isPersonalInfoConsent,
-  //   );
-  // }
 
   Future<void> savePersonalInfoConsent(bool consent) async {
     await _repo.setIsPersonalInfoConsent(consent);
@@ -237,12 +167,9 @@ class FilterViewModel extends Notifier<FilterModel> {
       disease: state.disease,
       location: state.location,
       birth: state.birth,
-      // isDisability: state.isDisability,
       income: state.income,
       familyCount: state.familyCount,
       incomeRate: state.incomeRate,
-      // isRareDisease: state.isRareDisease,
-      // isLifePrevention: state.isLifePrevention,
       isPersonalInfoConsent: consent,
     );
   }
@@ -254,12 +181,9 @@ class FilterViewModel extends Notifier<FilterModel> {
       disease: state.disease,
       location: state.location,
       birth: state.birth,
-      // isDisability: state.isDisability,
       income: state.income,
       familyCount: state.familyCount,
       incomeRate: state.incomeRate,
-      // isRareDisease: state.isRareDisease,
-      // isLifePrevention: state.isLifePrevention,
       isPersonalInfoConsent: consent,
     );
   }

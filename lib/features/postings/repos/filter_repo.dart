@@ -6,9 +6,6 @@ class FilterRepository {
   static const String _provinceName = "provinceName";
   static const String _cityName = "cityName";
   static const String _birth = "birth";
-  static const String _isDisability = "isDisability";
-  static const String _isRareDisease = "isRareDisease";
-  static const String _isLifePrevention = "isLifePrevention";
   static const String _isPersonalInfoConsent = "isPersonalInfoConsent";
   static const String _income = "income";
   static const String _familyCount = "familyCount";
@@ -51,18 +48,6 @@ class FilterRepository {
     _preferences.setInt(_familyCount, value);
   }
 
-  Future<void> setIsDisability(bool value) async {
-    _preferences.setBool(_isDisability, value);
-  }
-
-  Future<void> setIsRareDisease(bool value) async {
-    _preferences.setBool(_isRareDisease, value);
-  }
-
-  Future<void> setIsLifePrevention(bool value) async {
-    _preferences.setBool(_isLifePrevention, value);
-  }
-
   Future<void> setIsPersonalInfoConsent(bool value) async {
     _preferences.setBool(_isPersonalInfoConsent, value);
   }
@@ -93,18 +78,6 @@ class FilterRepository {
 
   int hasFamilyCount() {
     return _preferences.getInt(_familyCount) ?? 0;
-  }
-
-  bool hasIsDisability() {
-    return _preferences.getBool(_isDisability) ?? false;
-  }
-
-  bool hasIsRareDisease() {
-    return _preferences.getBool(_isRareDisease) ?? false;
-  }
-
-  bool hasIsLifePrevention() {
-    return _preferences.getBool(_isLifePrevention) ?? false;
   }
 
   bool hasIsPersonalInfoConsent() {
@@ -151,9 +124,6 @@ class FilterRepository {
     await _preferences.remove(_provinceName);
     await _preferences.remove(_cityName);
     await _preferences.remove(_birth);
-    await _preferences.remove(_isDisability);
-    await _preferences.remove(_isRareDisease);
-    await _preferences.remove(_isLifePrevention);
     await _preferences.remove(_isPersonalInfoConsent);
     await _preferences.remove(_income);
     await _preferences.remove(_familyCount);

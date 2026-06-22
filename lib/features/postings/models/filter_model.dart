@@ -12,12 +12,9 @@ class FilterModel {
     required this.disease,
     required this.location,
     required this.birth,
-    // required this.isDisability,
     required this.income,
     required this.familyCount,
     required this.incomeRate,
-    // required this.isRareDisease,
-    // required this.isLifePrevention,
     required this.isPersonalInfoConsent,
   });
   final List<String> disease;
@@ -26,15 +23,6 @@ class FilterModel {
   final int income;
   final int familyCount;
   final int incomeRate;
-  // /// 장애 여부
-  // final bool isDisability;
-  // /// 희귀/중증질환 선택 여부
-  // final bool isRareDisease;
-  // /// 생활/예방 선택 여부
-  // final bool isLifePrevention;
-  final bool isDisability = false;
-  final bool isRareDisease = false;
-  final bool isLifePrevention = false;
   /// 개인정보 동의 여부
   final bool isPersonalInfoConsent;
 }

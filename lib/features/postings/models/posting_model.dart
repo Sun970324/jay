@@ -28,7 +28,6 @@ const List<String> diseaseList = [
 class PostingModel {
   final int id;
   final String title;
-  final bool isDisability;
   final List<int> targetDisease;
   final LocationModel location;
   final List<String> content;
@@ -42,13 +41,10 @@ class PostingModel {
   final String siteLink;
   final List<String> description;
   final String contentSummary;
-  final bool isRareDisease;
-  final bool isLifePrevention;
 
   const PostingModel({
     required this.id,
     required this.title,
-    required this.isDisability,
     required this.content,
     required this.location,
     required this.age,
@@ -62,15 +58,12 @@ class PostingModel {
     required this.siteLink,
     required this.description,
     required this.contentSummary,
-    required this.isRareDisease,
-    required this.isLifePrevention,
   });
 
   factory PostingModel.fromMap(Map<String, dynamic> posting) {
     return PostingModel(
       id: posting['id'],
       title: posting['title'],
-      isDisability: posting['is_disability'],
       content: List<String>.from(posting['content'] ?? []),
       location: LocationModel(
           provinceName: posting['province'], cityName: posting['city']),
@@ -85,8 +78,6 @@ class PostingModel {
       supportTarget: List<String>.from(posting['support_target'] ?? []),
       receiptMethod: List<String>.from(posting['receipt_method'] ?? []),
       contentSummary: posting['content_summary'] ?? '',
-      isRareDisease: posting['is_rare_disease'] ?? false,
-      isLifePrevention: posting['is_life_prevention'] ?? false,
     );
   }
 }

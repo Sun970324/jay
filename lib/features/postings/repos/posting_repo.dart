@@ -23,9 +23,6 @@ class PostingRepository {
           ? filter.location.cityName
           : null,
       'p_birth_year': filter?.birth?.year,
-      // 'p_is_disability': (filter?.isDisability == true) ? true : null,
-      // 'p_is_rare_disease': (filter?.isRareDisease == true) ? true : null,
-      // 'p_is_life_prevention': (filter?.isLifePrevention == true) ? true : null,
       'p_income_rate': filter?.incomeRate ?? 0,
       'p_offset': offset,
       'p_limit': 10,
