@@ -215,7 +215,25 @@ class _CommunityScreenState extends ConsumerState<CommunityScreen> {
             Expanded(
               child: posts.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Center(child: Text('오류가 발생했습니다: $e')),
+                error: (e, _) => Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        '오류가 발생했어요.',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: () => ref.invalidate(communityProvider),
+                        child: const Text('다시 시도'),
+                      ),
+                    ],
+                  ),
+                ),
                 data: (list) {
                   if (list.isEmpty) {
                     return const Center(

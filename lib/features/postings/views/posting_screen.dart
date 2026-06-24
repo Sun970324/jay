@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:jay/constants/gaps.dart';
 import 'package:jay/constants/sizes.dart';
 import 'package:jay/features/postings/models/posting_model.dart';
+import 'package:jay/features/postings/view_models/filter_view_model.dart';
 import 'package:jay/features/postings/view_models/posting_view_model.dart';
 import 'package:jay/features/postings/views/posting_detail_screen.dart';
 import 'package:jay/features/postings/views/filter_modal.dart';
@@ -313,13 +314,61 @@ class _PostingScreenState extends ConsumerState<PostingScreen> {
                 ),
               ),
               Gaps.v8,
+              Builder(builder: (context) {
+                final chips = ref.watch(filterProvider).activeFilterChips;
+                if (chips.isEmpty) return const SizedBox.shrink();
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: SizedBox(
+                    height: 30,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: chips.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 6),
+                      itemBuilder: (_, i) => Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: const Color(0xffEAF0FF),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: const Color(0xff1154ED)),
+                        ),
+                        child: Text(
+                          chips[i],
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xff1154ED),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
               Expanded(
                 child: ref.watch(postingProvider).when(
                       loading: () => const Center(
                         child: CircularProgressIndicator(),
                       ),
                       error: (error, stackTrace) => Center(
-                        child: Text('error: $error'),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              '오류가 발생했어요.',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            TextButton(
+                              onPressed: () => ref.invalidate(postingProvider),
+                              child: const Text('다시 시도'),
+                            ),
+                          ],
+                        ),
                       ),
                       data: (postings) {
                         if (postings.isEmpty) {

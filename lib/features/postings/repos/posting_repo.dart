@@ -45,6 +45,47 @@ class PostingRepository {
     if (response == null) return null;
     return PostingModel.fromMap(response);
   }
+
+  Future<bool> isScrapped(int postingId) async {
+    final userId = postingsClient.auth.currentUser?.id;
+    if (userId == null) return false;
+    final res = await postingsClient
+        .from('posting_scraps')
+        .select()
+        .eq('user_id', userId)
+        .eq('posting_id', postingId)
+        .maybeSingle();
+    return res != null;
+  }
+
+  Future<void> toggleScrap(int postingId) async {
+    final userId = postingsClient.auth.currentUser!.id;
+    final scrapped = await isScrapped(postingId);
+    if (scrapped) {
+      await postingsClient
+          .from('posting_scraps')
+          .delete()
+          .eq('user_id', userId)
+          .eq('posting_id', postingId);
+    } else {
+      await postingsClient
+          .from('posting_scraps')
+          .insert({'user_id': userId, 'posting_id': postingId});
+    }
+  }
+
+  Future<List<PostingModel>> getScrappedPostings() async {
+    final userId = postingsClient.auth.currentUser?.id;
+    if (userId == null) return [];
+    final res = await postingsClient
+        .from('posting_scraps')
+        .select('postings(*)')
+        .eq('user_id', userId)
+        .order('created_at', ascending: false);
+    return (res as List)
+        .map((e) => PostingModel.fromMap(e['postings'] as Map<String, dynamic>))
+        .toList();
+  }
 }
 
 final postingRepo = Provider<PostingRepository>((ref) => PostingRepository());

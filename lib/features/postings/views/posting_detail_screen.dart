@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jay/constants/sizes.dart';
 import 'package:jay/features/postings/models/posting_model.dart';
 import 'package:jay/features/postings/widgets/posting_card.dart';
 import 'package:jay/features/postings/widgets/posting_detail_description.dart';
-import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class PostingDetailScreen extends StatelessWidget {
+class PostingDetailScreen extends ConsumerStatefulWidget {
   static const String routeName = "detail";
   static const String routeURL = "/detail/:postingId";
   const PostingDetailScreen({super.key, required this.item});
   final PostingModel item;
 
+  @override
+  ConsumerState<PostingDetailScreen> createState() =>
+      _PostingDetailScreenState();
+}
+
+class _PostingDetailScreenState extends ConsumerState<PostingDetailScreen> {
   void _onTapShare() {
     final uri = Uri.base.replace(
-      path: '/detail/${item.id}',
+      path: '/detail/${widget.item.id}',
       query: null,
       fragment: null,
     );
@@ -25,7 +32,7 @@ class PostingDetailScreen extends StatelessWidget {
   }
 
   Future<void> _onTapSiteLink() async {
-    final uri = Uri.tryParse(item.siteLink);
+    final uri = Uri.tryParse(widget.item.siteLink);
     if (uri != null && await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
@@ -61,7 +68,7 @@ class PostingDetailScreen extends StatelessWidget {
         child: Column(
           children: [
             PostingCard(
-              item: item,
+              item: widget.item,
               isDetailScreen: true,
             ),
             const SizedBox(height: Sizes.size10),
@@ -96,31 +103,31 @@ class PostingDetailScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (item.supportTarget.isNotEmpty) ...[
+                  if (widget.item.supportTarget.isNotEmpty) ...[
                     PostingDetailDescription(
                       title: '지원 대상',
-                      items: item.supportTarget,
+                      items: widget.item.supportTarget,
                     ),
                     const SizedBox(height: Sizes.size14),
                   ],
-                  if (item.content.isNotEmpty) ...[
+                  if (widget.item.content.isNotEmpty) ...[
                     PostingDetailDescription(
                       title: '지원 혜택',
-                      items: item.content,
+                      items: widget.item.content,
                     ),
                     const SizedBox(height: Sizes.size14),
                   ],
-                  if (item.receiptMethod.isNotEmpty) ...[
+                  if (widget.item.receiptMethod.isNotEmpty) ...[
                     PostingDetailDescription(
                       title: '접수 방법',
-                      items: item.receiptMethod,
+                      items: widget.item.receiptMethod,
                     ),
                     const SizedBox(height: Sizes.size14),
                   ],
-                  if (item.institution.isNotEmpty) ...[
+                  if (widget.item.institution.isNotEmpty) ...[
                     PostingDetailDescription(
                       title: '기관 정보',
-                      items: item.institution,
+                      items: widget.item.institution,
                     ),
                     const SizedBox(height: Sizes.size14),
                   ],

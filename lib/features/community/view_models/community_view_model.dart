@@ -28,22 +28,31 @@ class CommunityViewModel extends AsyncNotifier<List<CommunityPostModel>> {
     final current = state.valueOrNull ?? [];
     _isLoadingMore = true;
     _offset += _limit;
-    final sort = ref.read(communitySortProvider);
-    final query = ref.read(communitySearchProvider);
-    final more = await ref.read(communityRepo).getPosts(sort: sort, offset: _offset, query: query);
-    _hasMore = more.length == _limit;
-    _isLoadingMore = false;
-    state = AsyncData([...current, ...more]);
+    try {
+      final sort = ref.read(communitySortProvider);
+      final query = ref.read(communitySearchProvider);
+      final more = await ref.read(communityRepo).getPosts(sort: sort, offset: _offset, query: query);
+      _hasMore = more.length == _limit;
+      state = AsyncData([...current, ...more]);
+    } catch (_) {
+      _offset -= _limit;
+    } finally {
+      _isLoadingMore = false;
+    }
   }
 
   Future<void> refresh() async {
     _offset = 0;
     _hasMore = true;
     state = const AsyncLoading();
-    final sort = ref.read(communitySortProvider);
-    final query = ref.read(communitySearchProvider);
-    final posts = await ref.read(communityRepo).getPosts(sort: sort, offset: 0, query: query);
-    state = AsyncData(posts);
+    try {
+      final sort = ref.read(communitySortProvider);
+      final query = ref.read(communitySearchProvider);
+      final posts = await ref.read(communityRepo).getPosts(sort: sort, offset: 0, query: query);
+      state = AsyncData(posts);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
   }
 
   void searchByTitle(String query) {

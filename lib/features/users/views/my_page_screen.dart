@@ -127,6 +127,17 @@ class _LoggedInBody extends StatelessWidget {
                   label: '좋아요',
                   onTap: () => context.push('/my-likes'),
                 ),
+                const Divider(
+                    height: 1,
+                    color: Color(0xffECF0F7),
+                    indent: 20,
+                    endIndent: 20),
+                _menuItem(
+                  context,
+                  icon: Icons.bookmark_border,
+                  label: '저장한 공고',
+                  onTap: () => context.push('/my-scraps'),
+                ),
               ],
             ),
           ),

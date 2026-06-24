@@ -25,6 +25,21 @@ class FilterModel {
   final int incomeRate;
   /// 개인정보 동의 여부
   final bool isPersonalInfoConsent;
+
+  List<String> get activeFilterChips {
+    if (!isPersonalInfoConsent) return [];
+    final chips = <String>[];
+    if (disease.isNotEmpty) chips.add('질환 ${disease.length}개');
+    if (location.provinceName.isNotEmpty) {
+      final loc = location.cityName.isNotEmpty
+          ? '${location.provinceName} ${location.cityName}'
+          : location.provinceName;
+      chips.add(loc);
+    }
+    if (birth != null) chips.add('${birth!.year}년생');
+    if (income > 0 || familyCount > 0) chips.add('소득·가족');
+    return chips;
+  }
 }
 
 /**

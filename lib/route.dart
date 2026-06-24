@@ -20,6 +20,7 @@ import 'package:jay/features/users/views/service_info_screen.dart';
 import 'package:jay/features/users/views/onboarding_screen.dart';
 import 'package:jay/features/users/views/my_posts_screen.dart';
 import 'package:jay/features/legal/views/privacy_policy_screen.dart';
+import 'package:jay/features/postings/views/my_scraps_screen.dart';
 import 'package:jay/main_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -40,6 +41,24 @@ final routerProvider = Provider((ref) {
   final repo = ref.read(postingRepo);
   return GoRouter(
     initialLocation: '/',
+    errorBuilder: (context, state) => Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              '페이지를 찾을 수 없어요.',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () => context.go('/'),
+              child: const Text('홈으로 가기'),
+            ),
+          ],
+        ),
+      ),
+    ),
     refreshListenable: _AuthRefreshStream(
       Supabase.instance.client.auth.onAuthStateChange.where(
         (event) =>
@@ -111,6 +130,11 @@ final routerProvider = Provider((ref) {
         name: MyLikesScreen.routeName,
         path: MyLikesScreen.routeURL,
         builder: (context, state) => const MyLikesScreen(),
+      ),
+      GoRoute(
+        name: MyScrapsScreen.routeName,
+        path: MyScrapsScreen.routeURL,
+        builder: (context, state) => const MyScrapsScreen(),
       ),
       GoRoute(
         name: ServiceInfoScreen.routeName,

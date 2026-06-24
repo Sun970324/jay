@@ -44,3 +44,4 @@ app.*.map.json
 
 # Environment files
 assets/config/.env*
+plan.md

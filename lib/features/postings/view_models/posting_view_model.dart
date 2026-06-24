@@ -45,15 +45,19 @@ class PostingViewModel extends AsyncNotifier<List<PostingModel>> {
     _offset = 0;
     _hasMore = true;
     state = const AsyncLoading();
-    final result = await _fetchPostings(
-      filter: filter,
-      queryText: _lastQueryText,
-      offset: 0,
-    );
-    if (result.length < 10) _hasMore = false;
-    _offset = result.length;
-    _list = result;
-    state = AsyncData(result);
+    try {
+      final result = await _fetchPostings(
+        filter: filter,
+        queryText: _lastQueryText,
+        offset: 0,
+      );
+      if (result.length < 10) _hasMore = false;
+      _offset = result.length;
+      _list = result;
+      state = AsyncData(result);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
   }
 
   Future<void> searchByTitle(String queryText) async {
@@ -67,18 +71,23 @@ class PostingViewModel extends AsyncNotifier<List<PostingModel>> {
   Future<void> loadMore() async {
     if (_isLoadingMore || !_hasMore) return;
     _isLoadingMore = true;
-    final filter = ref.read(filterProvider);
-    final effectiveFilter = filter.isPersonalInfoConsent ? filter : null;
-    final newItems = await _fetchPostings(
-      filter: effectiveFilter,
-      queryText: _lastQueryText,
-      offset: _offset,
-    );
-    if (newItems.length < 10) _hasMore = false;
-    _offset += newItems.length;
-    _list = [..._list, ...newItems];
-    _isLoadingMore = false;
-    state = AsyncData(_list);
+    try {
+      final filter = ref.read(filterProvider);
+      final effectiveFilter = filter.isPersonalInfoConsent ? filter : null;
+      final newItems = await _fetchPostings(
+        filter: effectiveFilter,
+        queryText: _lastQueryText,
+        offset: _offset,
+      );
+      if (newItems.length < 10) _hasMore = false;
+      _offset += newItems.length;
+      _list = [..._list, ...newItems];
+      state = AsyncData(_list);
+    } catch (_) {
+      // 기존 데이터 유지
+    } finally {
+      _isLoadingMore = false;
+    }
   }
 }
 

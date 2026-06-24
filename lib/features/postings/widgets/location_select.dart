@@ -132,10 +132,23 @@ class _LocationSelectState extends ConsumerState<LocationSelect> {
                         itemBuilder: (context, i) {
                           final selected = _selectedProvince == i;
                           return GestureDetector(
-                            onTap: () => setState(() {
-                              _selectedProvince = i;
-                              _selectedCity = -1;
-                            }),
+                            onTap: () {
+                              if (_selectedProvince == i) {
+                                setState(() {
+                                  _selectedProvince = -1;
+                                  _selectedCity = -1;
+                                });
+                                ref.read(filterProvider.notifier).saveLocation(
+                                      const LocationModel(
+                                          provinceName: '', cityName: ''),
+                                    );
+                              } else {
+                                setState(() {
+                                  _selectedProvince = i;
+                                  _selectedCity = -1;
+                                });
+                              }
+                            },
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 12),
@@ -191,8 +204,21 @@ class _LocationSelectState extends ConsumerState<LocationSelect> {
                               itemBuilder: (context, i) {
                                 final selected = _selectedCity == i;
                                 return GestureDetector(
-                                  onTap: () =>
-                                      setState(() => _selectedCity = i),
+                                  onTap: () {
+                                    if (_selectedCity == i) {
+                                      setState(() => _selectedCity = -1);
+                                      ref
+                                          .read(filterProvider.notifier)
+                                          .saveLocation(LocationModel(
+                                            provinceName:
+                                                locationList[_selectedProvince]
+                                                    .provinceName,
+                                            cityName: '',
+                                          ));
+                                    } else {
+                                      setState(() => _selectedCity = i);
+                                    }
+                                  },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 12),
